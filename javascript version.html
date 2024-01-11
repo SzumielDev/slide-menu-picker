@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zajac Task</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background-color: rgb(31, 31, 31);
+        color: white;
+        user-select: none;
+        overflow: hidden;
+      }
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100%;
+        overflow: hidden;
+        cursor: pointer;
+      }
+      .carts {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        translate: -50%;
+        display: flex;
+        overflow: hidden;
+        z-index: 1;
+        transition-property: left;
+        transition-duration: 0.2s;
+        transition-timing-function: ease;
+      }
+      .carts > div {
+        min-width: 50px;
+        border: 1px solid rgb(88, 88, 88);
+        margin: 5px 2px;
+        padding: 15px 10px 15px 10px;
+        border-radius: 10px;
+        text-align: center;
+        background-color: rgb(31, 31, 31);
+      }
+      .line {
+        width: 2px;
+        height: 60px;
+        background-color: rgb(134, 79, 31);
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        translate: -50%;
+        display: flex;
+        overflow: hidden;
+        z-index: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" id="container">
+      <div class="line"></div>
+      <div class="carts" id="carts">
+        <div>0</div>
+        <div>0.5</div>
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+        <div>5</div>
+        <div>8</div>
+        <div>13</div>
+        <div>20</div>
+        <div>40</div>
+        <div>100</div>
+      </div>
+    </div>
+    <script>
+      const carts = document.getElementById("carts");
+      const buttonsInsideCarts = carts.querySelectorAll("div");
+      const container = document.getElementById("container");
+
+      let isGrabbed = false;
+      let currentCartsPosition = carts.getBoundingClientRect().left;
+      currentCartsPosition += carts.offsetWidth / 2;
+      
+      let mouseDifferenceAfterCursorMove = 0;
+      let cartsPositionOnStart = 0;
+      
+      const halfOfTheContainerWidth = container.offsetWidth / 2;
+      const fullButtonWidth = carts.firstElementChild.offsetWidth + 4;
+      const halOfTheButtonWidth = fullButtonWidth / 2;
+      const cartsWidth = carts.offsetWidth;
+      const numberOfChilds = carts.childElementCount;
+      const everyPositionOfCenterButtons = Array.from(
+        { length: numberOfChilds },
+        (_, i) =>
+          halfOfTheContainerWidth - halOfTheButtonWidth - i * fullButtonWidth
+      );
+
+      const setPositionOfCarts = (position, speed) => {
+        carts.style.left = `${position}px`;
+      };
+
+      const setRightAndLeftLimitToCarts = () => {
+        if (currentCartsPosition - cartsWidth / 2 > halfOfTheContainerWidth) {
+          return currentCartsPosition = halfOfTheContainerWidth + cartsWidth / 1.4;
+        } else if (
+          currentCartsPosition + cartsWidth / 2 <
+          halfOfTheContainerWidth
+        ) {
+          return currentCartsPosition = halfOfTheContainerWidth - cartsWidth / 1.4;
+        }
+      }
+
+      const moveCartsPosition = (e) => {
+        if (!isGrabbed) return;
+        e.preventDefault();
+        
+        let mouseX = e.clientX || e.touches[0].clientX;
+        let mouseCurrentMoveRange = mouseX - mouseDifferenceAfterCursorMove;
+
+        currentCartsPosition = cartsPositionOnStart + mouseCurrentMoveRange;
+
+         setRightAndLeftLimitToCarts();
+        setPositionOfCarts(currentCartsPosition, 1000);
+      };
+
+      const moveCartsToClosestPosition = () => {
+        currentPosition = currentCartsPosition - cartsWidth / 2;
+
+        if (currentPosition > everyPositionOfCenterButtons[0]) {
+          currentCartsPosition =
+            everyPositionOfCenterButtons[0] + cartsWidth / 2;
+        } else if (
+          currentPosition <
+          everyPositionOfCenterButtons[everyPositionOfCenterButtons.length - 1]
+        ) {
+          currentCartsPosition =
+            everyPositionOfCenterButtons[
+              everyPositionOfCenterButtons.length - 1
+            ] +
+            cartsWidth / 2;
+        } else {
+          everyPositionOfCenterButtons.forEach((centerPosition) => {
+            if (
+              currentPosition > centerPosition - halOfTheButtonWidth &&
+              currentPosition < centerPosition + halOfTheButtonWidth
+            ) {
+              currentCartsPosition = centerPosition + cartsWidth / 2;
+            }
+          });
+        }
+        setPositionOfCarts(currentCartsPosition, 200);
+      };
+
+      const handleClickOnButton = (button) => {
+        const icurrentButton = Array.from(buttonsInsideCarts).indexOf(
+          button.target
+        );
+        currentCartsPosition =
+          everyPositionOfCenterButtons[icurrentButton] + cartsWidth / 2;
+
+        setPositionOfCarts(currentCartsPosition, 200);
+      };
+
+      container.addEventListener("mousedown", (e) => {
+        isGrabbed = true
+        carts.style.transitionDuration = "0s";
+        mouseDifferenceAfterCursorMove = e.clientX;
+        cartsPositionOnStart = currentCartsPosition;
+      });
+
+      container.addEventListener("touchstart", (e) => {
+        isGrabbed = true
+        carts.style.transitionDuration = "0s";
+        mouseDifferenceAfterCursorMove = e.clientX || e.touches[0].clientX;
+        cartsPositionOnStart = currentCartsPosition;
+      });
+
+      buttonsInsideCarts.forEach((button) => {
+        button.addEventListener("click", handleClickOnButton);
+      });
+
+      container.addEventListener("mousemove", (e) => {
+        moveCartsPosition(e);
+      });
+
+      container.addEventListener("touchmove", (e) => {
+        moveCartsPosition(e);
+      });
+
+      container.addEventListener("touchend", () => {
+        isGrabbed = false;
+        carts.style.transitionDuration = "0.5s";
+        moveCartsToClosestPosition();
+      });
+
+      container.addEventListener("mouseup", () => {
+        isGrabbed = false;
+        carts.style.transitionDuration = "0.5s";
+        moveCartsToClosestPosition();
+        mouseDifferenceAfterCursorMove = 0;
+      });
+
+    </script>
+  </body>
+</html>
