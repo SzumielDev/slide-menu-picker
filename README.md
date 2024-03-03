@@ -11,6 +11,17 @@ Tailwind template
         <img align="center" width="350" src="/assets/avatar.png" alt="tailwind" />
 </div>
 
+My copy
+<div align="center">
+        <img align="center" width="350" src="/assets/screen.jpg" alt="copy tailwind" />
+</div>
+<div align="center">
+        <img align="center" width="350" src="/assets/screen2.jpng" alt="copy tailwind" />
+</div>
+<div align="center">
+        <img align="center" width="350" src="/assets/screen3.jpg" alt="copy tailwind" />
+</div>
+
 ex. Marcin Szumiel
 
 ## Version History
