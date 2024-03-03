@@ -4,6 +4,8 @@ Tailwind website copy
 
 ## Description
 
+--> Template available on github pages <--
+
 Its a simple copy od tailwind template. It took me a 3h to build this in pure HTML and tailwind css.
 
 Tailwind template
