@@ -16,7 +16,7 @@ My copy
         <img align="center" width="350" src="/assets/screen.jpg" alt="copy tailwind" />
 </div>
 <div align="center">
-        <img align="center" width="350" src="/assets/screen2.jpng" alt="copy tailwind" />
+        <img align="center" width="350" src="/assets/screen2.jpg" alt="copy tailwind" />
 </div>
 <div align="center">
         <img align="center" width="350" src="/assets/screen3.jpg" alt="copy tailwind" />
