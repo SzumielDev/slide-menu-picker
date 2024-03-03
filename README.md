@@ -8,7 +8,7 @@ Its a simple copy od tailwind template. It took me a 3h to build this in pure HT
 
 Tailwind template
 <div align="center">
-        <img align="center" width="350" src="/assets/avatar.jpg" alt="tailwind" />
+        <img align="center" width="350" src="/assets/avatar.png" alt="tailwind" />
 </div>
 
 ex. Marcin Szumiel
